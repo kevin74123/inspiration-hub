@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nikodēmos — 영감 허브</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #0e0e0e;
+      color: #e8e8e8;
+      min-height: 100vh;
+      padding: 2rem 1.5rem;
+    }
+
+    header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 2rem;
+      border-bottom: 0.5px solid #2a2a2a;
+      padding-bottom: 1.25rem;
+    }
+
+    header h1 {
+      font-size: 20px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      color: #f0f0f0;
+    }
+
+    header span {
+      font-size: 12px;
+      color: #555;
+      font-style: italic;
+      letter-spacing: 0.03em;
+    }
+
+    #controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
+
+    #shuffle-btn {
+      background: transparent;
+      border: 0.5px solid #333;
+      color: #ccc;
+      font-size: 13px;
+      padding: 7px 14px;
+      border-radius: 99px;
+      cursor: pointer;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    #shuffle-btn:hover { border-color: #555; color: #fff; }
+    #shuffle-btn:active { transform: scale(0.97); }
+
+    .filter-btn {
+      background: transparent;
+      border: 0.5px solid #2a2a2a;
+      color: #555;
+      font-size: 12px;
+      padding: 5px 12px;
+      border-radius: 99px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .filter-btn.active, .filter-btn:hover {
+      border-color: #444;
+      color: #ccc;
+    }
+
+    #count {
+      margin-left: auto;
+      font-size: 12px;
+      color: #444;
+    }
+
+    #highlight {
+      display: none;
+      background: #161616;
+      border: 0.5px solid #2a2a2a;
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    #highlight .label {
+      font-size: 11px;
+      color: #444;
+      letter-spacing: 0.08em;
+      margin-bottom: 10px;
+    }
+
+    #highlight .hl-title {
+      font-size: 18px;
+      font-weight: 500;
+      color: #f0f0f0;
+      line-height: 1.4;
+      margin-bottom: 8px;
+    }
+
+    #highlight .hl-preview {
+      font-size: 13px;
+      color: #777;
+      line-height: 1.7;
+    }
+
+    #highlight a {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+      color: #666;
+      text-decoration: none;
+      margin-top: 12px;
+      transition: color 0.15s;
+    }
+
+    #highlight a:hover { color: #aaa; }
+
+    #grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 10px;
+    }
+
+    .card {
+      background: #111;
+      border: 0.5px solid #1e1e1e;
+      border-radius: 10px;
+      padding: 1rem 1.1rem;
+      text-decoration: none;
+      display: block;
+      transition: border-color 0.15s, transform 0.15s;
+      animation: fadeIn 0.3s ease both;
+    }
+
+    .card:hover {
+      border-color: #333;
+      transform: translateY(-2px);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .card-tag {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      color: #444;
+      margin-bottom: 7px;
+    }
+
+    .dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+    }
+
+    .dot-philosophy { background: #7f77dd; }
+    .dot-brand { background: #1d9e75; }
+    .dot-creative { background: #d85a30; }
+    .dot-life { background: #ba7517; }
+    .dot-etc { background: #444; }
+
+    .card-title {
+      font-size: 14px;
+      font-weight: 500;
+      color: #ddd;
+      line-height: 1.45;
+    }
+
+    .card-preview {
+      font-size: 12px;
+      color: #555;
+      margin-top: 6px;
+      line-height: 1.6;
+    }
+
+    .card-date {
+      font-size: 11px;
+      color: #333;
+      margin-top: 10px;
+    }
+
+    #loading {
+      text-align: center;
+      padding: 4rem;
+      color: #444;
+      font-size: 14px;
+    }
+
+    #error {
+      text-align: center;
+      padding: 4rem;
+      color: #633;
+      font-size: 13px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Nikodēmos — 영감 허브</h1>
+    <span>진정 본질을 보는 눈</span>
+  </header>
+
+  <div id="controls">
+    <button id="shuffle-btn" onclick="shuffle()">↻ 섞기</button>
+    <button class="filter-btn active" onclick="setFilter('all', this)">전체</button>
+    <button class="filter-btn" onclick="setFilter('philosophy', this)">철학</button>
+    <button class="filter-btn" onclick="setFilter('brand', this)">브랜드</button>
+    <button class="filter-btn" onclick="setFilter('creative', this)">크리에이티브</button>
+    <button class="filter-btn" onclick="setFilter('life', this)">삶</button>
+    <span id="count"></span>
+  </div>
+
+  <div id="highlight">
+    <div class="label">오늘의 영감</div>
+    <div class="hl-title" id="hl-title"></div>
+    <div class="hl-preview" id="hl-preview"></div>
+    <a id="hl-link" href="#" target="_blank">↗ 노션에서 열기</a>
+  </div>
+
+  <div id="loading">노션에서 불러오는 중...</div>
+  <div id="error">불러오기 실패. Worker URL을 확인해주세요.</div>
+  <div id="grid"></div>
+
+  <script>
+    // ← 여기에 Cloudflare Worker URL 넣기
+    const WORKER_URL = "https://fragrant-thunder-0cc5.gunwo742.workers.dev/api/notes";
+
+    const TAGS = {
+      philosophy: ['철학', '니체', '허무', '생각', '자유', '본질', '사랑', '삶', '사람의'],
+      brand: ['브랜드', '니코', 'nikodemos', '마케팅', '사업', '온라인', '소수', '취향'],
+      creative: ['영감', '아이디어', '촬영', '음악', '시인', '표현', '새로움', '레퍼런스', '달과'],
+      life: ['극복', '경험', '뚱캔', '재능', '얼마든지', '냄새', '세상'],
+    };
+
+    let allCards = [];
+    let currentFilter = 'all';
+
+    function guessTag(title, preview) {
+      const text = (title + ' ' + (preview || '')).toLowerCase();
+      for (const [tag, kws] of Object.entries(TAGS)) {
+        if (kws.some(k => text.includes(k.toLowerCase()))) return tag;
+      }
+      return 'etc';
+    }
+
+    const tagLabel = { philosophy: '철학', brand: '브랜드', creative: '크리에이티브', life: '삶', etc: '기타' };
+
+    function relDate(iso) {
+      if (!iso) return '';
+      const diff = Math.floor((Date.now() - new Date(iso)) / 86400000);
+      if (diff === 0) return '오늘';
+      if (diff === 1) return '어제';
+      if (diff < 7) return `${diff}일 전`;
+      if (diff < 30) return `${Math.floor(diff/7)}주 전`;
+      if (diff < 365) return `${Math.floor(diff/30)}달 전`;
+      return `${Math.floor(diff/365)}년 전`;
+    }
+
+    function shuffle() {
+      const list = currentFilter === 'all' ? allCards : allCards.filter(c => c.tag === currentFilter);
+      const shuffled = [...list].sort(() => Math.random() - 0.5);
+      render(shuffled);
+      if (shuffled.length > 0) showHighlight(shuffled[0]);
+    }
+
+    function setFilter(tag, btn) {
+      currentFilter = tag;
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      shuffle();
+    }
+
+    function showHighlight(card) {
+      const hl = document.getElementById('highlight');
+      document.getElementById('hl-title').textContent = card.title;
+      document.getElementById('hl-preview').textContent = card.preview || '';
+      document.getElementById('hl-link').href = card.url;
+      hl.style.display = 'block';
+    }
+
+    function render(cards) {
+      const grid = document.getElementById('grid');
+      grid.innerHTML = '';
+      document.getElementById('count').textContent = `${cards.length}개`;
+
+      cards.forEach((card, i) => {
+        const a = document.createElement('a');
+        a.className = 'card';
+        a.href = card.url;
+        a.target = '_blank';
+        a.style.animationDelay = `${i * 0.025}s`;
+        a.innerHTML = `
+          <div class="card-tag">
+            <span class="dot dot-${card.tag}"></span>
+            ${tagLabel[card.tag] || '기타'}
+          </div>
+          <div class="card-title">${card.title}</div>
+          ${card.preview ? `<div class="card-preview">${card.preview}</div>` : ''}
+          <div class="card-date">${relDate(card.date)}</div>
+        `;
+        grid.appendChild(a);
+      });
+    }
+
+    async function load() {
+      try {
+        const res = await fetch(WORKER_URL);
+        const data = await res.json();
+
+        document.getElementById('loading').style.display = 'none';
+
+        allCards = (data.results || [])
+          .filter(p => p.object === 'page')
+          .map(p => {
+            const title = p.properties?.이름?.title?.[0]?.plain_text || '(제목 없음)';
+            const url = p.url || '#';
+            const date = p.last_edited_time || p.created_time || '';
+            const tag = guessTag(title, '');
+            return { title, url, date, preview: '', tag };
+          })
+          .filter(c => c.title !== '(제목 없음)');
+
+        shuffle();
+      } catch (e) {
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('error').style.display = 'block';
+      }
+    }
+
+    load();
+  </script>
+
+</body>
+</html>
