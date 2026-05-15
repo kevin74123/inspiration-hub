@@ -330,7 +330,7 @@
 
         document.getElementById('loading').style.display = 'none';
 
-        allCards = data
+        allCards = (data.results || [])
           .filter(p => p.object === 'page')
           .map(p => {
             const title = p.properties?.이름?.title?.[0]?.plain_text || '(제목 없음)';
