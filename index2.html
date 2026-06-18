@@ -4,8 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Schedule — Nikodēmos</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Inter:wght@300;400&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -15,7 +13,6 @@
     --card: #161616;
     --border: #222222;
     --gold: #C8B89A;
-    --gold-dim: rgba(200,184,154,0.25);
     --text: #F0EAE0;
     --text-muted: #6A6460;
     --text-dim: #3A3632;
@@ -27,10 +24,9 @@
   body {
     background: var(--bg);
     color: var(--text);
-    font-family: 'Inter', sans-serif;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     font-weight: 300;
     min-height: 100vh;
-    padding: 0;
   }
 
   /* HEADER */
@@ -38,125 +34,104 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 32px 40px 24px;
+    padding: 28px 40px 22px;
     border-bottom: 1px solid var(--border);
   }
 
   .brand {
-    font-family: 'Cormorant Garamond', serif;
-    font-weight: 300;
-    font-size: 13px;
-    letter-spacing: 0.25em;
+    font-size: 11px;
+    letter-spacing: 0.28em;
     color: var(--gold);
     text-transform: uppercase;
+    font-weight: 400;
   }
 
   .month-nav {
     display: flex;
     align-items: center;
-    gap: 24px;
+    gap: 20px;
   }
 
   .month-title {
-    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
     font-weight: 300;
-    font-size: 28px;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.04em;
     color: var(--text);
-    min-width: 200px;
+    min-width: 180px;
     text-align: center;
-  }
-
-  .month-title span {
-    font-size: 14px;
-    color: var(--text-muted);
-    margin-left: 8px;
-    font-family: 'Inter', sans-serif;
-    font-weight: 300;
   }
 
   .nav-btn {
     background: none;
     border: 1px solid var(--border);
     color: var(--text-muted);
-    width: 32px;
-    height: 32px;
+    width: 30px;
+    height: 30px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    font-size: 12px;
+    font-size: 13px;
     transition: border-color 0.2s, color 0.2s;
   }
-
-  .nav-btn:hover {
-    border-color: var(--gold);
-    color: var(--gold);
-  }
+  .nav-btn:hover { border-color: var(--gold); color: var(--gold); }
 
   .today-btn {
     background: none;
     border: 1px solid var(--border);
     color: var(--text-muted);
     padding: 6px 14px;
-    font-size: 11px;
-    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-family: inherit;
     font-weight: 300;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.12em;
     cursor: pointer;
     transition: border-color 0.2s, color 0.2s;
   }
-
-  .today-btn:hover {
-    border-color: var(--gold);
-    color: var(--gold);
-  }
+  .today-btn:hover { border-color: var(--gold); color: var(--gold); }
 
   /* LOADING */
-  .loading-bar {
-    height: 1px;
-    background: var(--border);
-    overflow: hidden;
-    position: relative;
-  }
-
+  .loading-bar { height: 1px; background: var(--border); overflow: hidden; position: relative; }
   .loading-bar.active::after {
     content: '';
     position: absolute;
-    left: -40%;
-    width: 40%;
-    height: 100%;
+    left: -40%; width: 40%; height: 100%;
     background: var(--gold);
-    animation: slide 1s ease-in-out infinite;
+    animation: slide 0.9s ease-in-out infinite;
   }
+  @keyframes slide { to { left: 140%; } }
 
-  @keyframes slide {
-    to { left: 140%; }
+  /* ERROR */
+  .error-msg {
+    display: none;
+    padding: 10px 40px;
+    font-size: 11px;
+    color: var(--red);
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid var(--border);
   }
+  .error-msg.show { display: block; }
 
-  /* CALENDAR GRID */
-  .calendar-wrap {
-    padding: 0 40px 40px;
-  }
+  /* CALENDAR */
+  .calendar-wrap { padding: 0 40px 40px; }
 
   .weekdays {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     border-bottom: 1px solid var(--border);
-    margin-bottom: 0;
   }
 
   .weekday {
-    padding: 16px 0 12px;
-    font-size: 10px;
-    letter-spacing: 0.18em;
+    padding: 14px 0 10px;
+    font-size: 9px;
+    letter-spacing: 0.2em;
     color: var(--text-dim);
     text-transform: uppercase;
     text-align: center;
+    font-weight: 400;
   }
-
-  .weekday:first-child { color: var(--red); opacity: 0.6; }
-  .weekday:last-child { color: var(--blue); opacity: 0.6; }
+  .weekday:first-child { color: rgba(200,122,106,0.5); }
+  .weekday:last-child  { color: rgba(122,154,200,0.5); }
 
   .grid {
     display: grid;
@@ -167,164 +142,93 @@
   .cell {
     border-right: 1px solid var(--border);
     border-bottom: 1px solid var(--border);
-    min-height: 110px;
-    padding: 10px 10px 8px;
-    position: relative;
-    transition: background 0.15s;
+    min-height: 108px;
+    padding: 9px 9px 7px;
+    transition: background 0.12s;
   }
-
-  .cell:hover {
-    background: var(--surface);
-  }
-
-  .cell.other-month {
-    opacity: 0.3;
-  }
-
-  .cell.today {
-    box-shadow: inset 0 0 0 1px var(--gold);
-  }
+  .cell:hover { background: var(--surface); }
+  .cell.other-month { opacity: 0.28; }
+  .cell.today { box-shadow: inset 0 0 0 1px var(--gold); }
 
   .date-num {
     font-size: 11px;
     font-weight: 300;
     color: var(--text-muted);
-    letter-spacing: 0.04em;
-    margin-bottom: 6px;
+    letter-spacing: 0.03em;
+    margin-bottom: 5px;
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 5px;
   }
+  .cell.today .date-num { color: var(--gold); }
+  .cell.sun .date-num { color: rgba(200,122,106,0.55); }
+  .cell.sat .date-num { color: rgba(122,154,200,0.55); }
+  .cell.today.sun .date-num,
+  .cell.today.sat .date-num { color: var(--gold); }
 
-  .cell.today .date-num {
-    color: var(--gold);
-  }
-
-  .date-num .dot {
-    width: 3px;
-    height: 3px;
+  .today-dot {
+    width: 3px; height: 3px;
     border-radius: 50%;
     background: var(--gold);
     display: none;
   }
-
-  .cell.today .dot { display: block; }
-
-  /* 요일별 색상 */
-  .cell.sun .date-num { color: rgba(200, 122, 106, 0.5); }
-  .cell.sat .date-num { color: rgba(122, 154, 200, 0.5); }
-  .cell.today.sun .date-num, .cell.today.sat .date-num { color: var(--gold); }
+  .cell.today .today-dot { display: block; }
 
   /* EVENTS */
   .event {
     display: block;
     font-size: 10px;
     font-weight: 300;
-    letter-spacing: 0.02em;
-    padding: 3px 6px;
+    letter-spacing: 0.01em;
+    padding: 3px 6px 3px 8px;
     margin-bottom: 2px;
-    border-radius: 0;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     cursor: default;
     position: relative;
-    line-height: 1.4;
+    line-height: 1.45;
+    border-left: 2px solid transparent;
   }
 
-  .event::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 2px;
-  }
-
-  .event.type-일정 {
-    background: rgba(200, 122, 106, 0.08);
-    color: #D4A49A;
-  }
-  .event.type-일정::before { background: var(--red); }
-
-  .event.type-할일 {
-    background: rgba(122, 154, 200, 0.08);
-    color: #9AB4D4;
-  }
-  .event.type-할일::before { background: var(--blue); }
-
-  .event.type-일기 {
-    background: rgba(200, 184, 106, 0.08);
-    color: #C8BC8A;
-  }
-  .event.type-일기::before { background: var(--yellow); }
-
-  .event.done {
-    opacity: 0.35;
-    text-decoration: line-through;
-  }
-
-  .event.multi-start { border-radius: 0; }
-  .event.multi-mid { opacity: 0.7; }
-  .event.multi-end { opacity: 0.7; }
+  .event.type-일정  { background: rgba(200,122,106,0.09); color: #D4A49A; border-left-color: var(--red); }
+  .event.type-할일  { background: rgba(122,154,200,0.09); color: #9AB4D4; border-left-color: var(--blue); }
+  .event.type-일기  { background: rgba(200,184,106,0.09); color: #C8BC8A; border-left-color: var(--yellow); }
+  .event.done { opacity: 0.3; text-decoration: line-through; }
 
   /* LEGEND */
   .legend {
     display: flex;
     gap: 20px;
-    padding: 20px 40px;
+    padding: 16px 40px;
     border-top: 1px solid var(--border);
   }
-
-  .legend-item {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 10px;
-    letter-spacing: 0.1em;
-    color: var(--text-muted);
-  }
-
-  .legend-dot {
-    width: 8px;
-    height: 2px;
-  }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 10px; letter-spacing: 0.1em; color: var(--text-muted); }
+  .legend-dot { width: 8px; height: 2px; }
 
   /* TOOLTIP */
   .tooltip {
     position: fixed;
-    background: var(--card);
+    background: #1A1A1A;
     border: 1px solid var(--border);
     padding: 10px 14px;
     font-size: 11px;
     pointer-events: none;
-    z-index: 100;
-    max-width: 200px;
+    z-index: 200;
+    max-width: 210px;
     display: none;
     line-height: 1.6;
+    font-family: inherit;
   }
-
   .tooltip.show { display: block; }
-  .tooltip-title { color: var(--text); margin-bottom: 4px; }
-  .tooltip-date { color: var(--text-muted); font-size: 10px; letter-spacing: 0.05em; }
-  .tooltip-tag {
-    display: inline-block;
-    font-size: 9px;
-    letter-spacing: 0.1em;
+  .tt-title { color: var(--text); margin-bottom: 3px; font-weight: 400; }
+  .tt-date  { color: var(--text-muted); font-size: 10px; letter-spacing: 0.05em; }
+  .tt-tags  { margin-top: 6px; display: flex; gap: 4px; flex-wrap: wrap; }
+  .tt-tag {
+    font-size: 9px; letter-spacing: 0.1em;
     padding: 1px 5px;
-    margin-top: 5px;
     border: 1px solid var(--border);
     color: var(--text-muted);
-  }
-
-  /* EMPTY STATE */
-  .empty {
-    text-align: center;
-    color: var(--text-dim);
-    font-size: 11px;
-    letter-spacing: 0.1em;
-    padding: 60px 0;
-    grid-column: 1 / -1;
   }
 </style>
 </head>
@@ -334,13 +238,14 @@
   <div class="brand">Nikodēmos — Schedule</div>
   <div class="month-nav">
     <button class="nav-btn" id="prevBtn">&#8592;</button>
-    <div class="month-title" id="monthTitle">2026년 6월</div>
+    <div class="month-title" id="monthTitle"></div>
     <button class="nav-btn" id="nextBtn">&#8594;</button>
   </div>
   <button class="today-btn" id="todayBtn">오늘</button>
 </div>
 
 <div class="loading-bar" id="loadingBar"></div>
+<div class="error-msg" id="errorMsg"></div>
 
 <div class="calendar-wrap">
   <div class="weekdays">
@@ -356,74 +261,67 @@
 </div>
 
 <div class="legend">
-  <div class="legend-item">
-    <div class="legend-dot" style="background: var(--red)"></div>
-    <span>일정</span>
-  </div>
-  <div class="legend-item">
-    <div class="legend-dot" style="background: var(--blue)"></div>
-    <span>할일</span>
-  </div>
-  <div class="legend-item">
-    <div class="legend-dot" style="background: var(--yellow)"></div>
-    <span>일기</span>
-  </div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div>일정</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--blue)"></div>할일</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--yellow)"></div>일기</div>
 </div>
 
 <div class="tooltip" id="tooltip">
-  <div class="tooltip-title" id="ttTitle"></div>
-  <div class="tooltip-date" id="ttDate"></div>
-  <div id="ttTag"></div>
+  <div class="tt-title" id="ttTitle"></div>
+  <div class="tt-date"  id="ttDate"></div>
+  <div class="tt-tags"  id="ttTags"></div>
 </div>
 
 <script>
 const PROXY = "https://fragrant-thunder-0cc5.gunwo742.workers.dev";
+const KR_MONTHS = ["1월","2월","3월","4월","5월","6월","7월","8월","9월","10월","11월","12월"];
 
-let currentYear, currentMonth;
+// 타임존 무관하게 로컬 날짜 문자열 반환
+function localDateStr(d) {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${y}-${m}-${day}`;
+}
+
+const _today = new Date();
+const todayStr = localDateStr(_today);
+let currentYear = _today.getFullYear();
+let currentMonth = _today.getMonth(); // 0-indexed
 let eventsCache = {};
-let tooltip = document.getElementById("tooltip");
+const tooltip = document.getElementById("tooltip");
 
-// --- 초기화 ---
-const today = new Date();
-currentYear = today.getFullYear();
-currentMonth = today.getMonth(); // 0-indexed
+// 네비게이션
+document.getElementById("prevBtn").onclick = () => { currentMonth--; if (currentMonth < 0) { currentMonth = 11; currentYear--; } render(); };
+document.getElementById("nextBtn").onclick = () => { currentMonth++; if (currentMonth > 11) { currentMonth = 0; currentYear++; } render(); };
+document.getElementById("todayBtn").onclick = () => { currentYear = _today.getFullYear(); currentMonth = _today.getMonth(); render(); };
 
-document.getElementById("prevBtn").addEventListener("click", () => {
-  currentMonth--;
-  if (currentMonth < 0) { currentMonth = 11; currentYear--; }
-  render();
-});
-document.getElementById("nextBtn").addEventListener("click", () => {
-  currentMonth++;
-  if (currentMonth > 11) { currentMonth = 0; currentYear++; }
-  render();
-});
-document.getElementById("todayBtn").addEventListener("click", () => {
-  currentYear = today.getFullYear();
-  currentMonth = today.getMonth();
-  render();
-});
-
-// --- API ---
+// API fetch
 async function fetchSchedule(year, month) {
   const key = `${year}-${month}`;
   if (eventsCache[key]) return eventsCache[key];
 
   setLoading(true);
+  setError("");
 
-  // 이전달 말 ~ 다음달 초까지 넉넉하게
+  // 해당 월 전체 + 앞뒤 여유
   const start = new Date(year, month - 1, 25);
-  const end = new Date(year, month + 1, 10);
-  const fmt = d => d.toISOString().slice(0, 10);
+  const end   = new Date(year, month + 1, 10);
+  const url   = `${PROXY}/api/schedule?start=${localDateStr(start)}&end=${localDateStr(end)}`;
 
   try {
-    const res = await fetch(`${PROXY}/api/schedule?start=${fmt(start)}&end=${fmt(end)}`);
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
-    const events = (data.results || []).map(parseEvent).filter(Boolean);
+
+    if (data.object === "error") throw new Error(data.message || "Notion API 오류");
+
+    const results = data.results || [];
+    const events = results.map(parseEvent).filter(Boolean);
     eventsCache[key] = events;
     return events;
-  } catch(e) {
-    console.error(e);
+  } catch (e) {
+    setError(`데이터를 불러오지 못했어요 — ${e.message}`);
     return [];
   } finally {
     setLoading(false);
@@ -431,134 +329,129 @@ async function fetchSchedule(year, month) {
 }
 
 function parseEvent(page) {
-  const props = page.properties;
-  const title = props["이름"]?.title?.[0]?.plain_text || "(제목 없음)";
-  const dateP = props["날짜"]?.date;
-  if (!dateP?.start) return null;
+  try {
+    const props = page.properties;
+    const titleArr = props["이름"]?.title;
+    const title = (titleArr && titleArr.length > 0) ? titleArr[0].plain_text : "(제목 없음)";
+    const dateP = props["날짜"]?.date;
+    if (!dateP || !dateP.start) return null;
 
-  const start = dateP.start.slice(0, 10);
-  const end = dateP.end ? dateP.end.slice(0, 10) : start;
-  const type = props["선택"]?.select?.name || "일정";
-  const done = props["완료"]?.checkbox || false;
-  const importance = props["중요도"]?.select?.name || "";
+    const start = dateP.start.slice(0, 10);
+    const end   = dateP.end ? dateP.end.slice(0, 10) : start;
+    const type  = props["선택"]?.select?.name || "일정";
+    const done  = props["완료"]?.checkbox || false;
+    const imp   = props["중요도"]?.select?.name || "";
 
-  return { title, start, end, type, done, importance, id: page.id };
+    return { title, start, end, type, done, imp };
+  } catch(e) {
+    return null;
+  }
 }
 
-// --- 렌더 ---
+// 렌더
 async function render() {
-  updateHeader();
+  document.getElementById("monthTitle").textContent = `${currentYear}년 ${KR_MONTHS[currentMonth]}`;
   const events = await fetchSchedule(currentYear, currentMonth);
   renderGrid(events);
-}
-
-function updateHeader() {
-  const KR_MONTHS = ["1월","2월","3월","4월","5월","6월","7월","8월","9월","10월","11월","12월"];
-  document.getElementById("monthTitle").innerHTML =
-    `${currentYear}년 ${KR_MONTHS[currentMonth]}`;
 }
 
 function renderGrid(events) {
   const grid = document.getElementById("calGrid");
   grid.innerHTML = "";
 
-  const firstDay = new Date(currentYear, currentMonth, 1).getDay();
-  const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-  const daysInPrev = new Date(currentYear, currentMonth, 0).getDate();
-
-  const todayStr = today.toISOString().slice(0, 10);
-  const DAY_CLASSES = ["sun","","","","","","sat"];
-
-  // 전체 셀 수
-  const totalCells = Math.ceil((firstDay + daysInMonth) / 7) * 7;
+  const firstDay     = new Date(currentYear, currentMonth, 1).getDay();
+  const daysInMonth  = new Date(currentYear, currentMonth + 1, 0).getDate();
+  const daysInPrev   = new Date(currentYear, currentMonth, 0).getDate();
+  const totalCells   = Math.ceil((firstDay + daysInMonth) / 7) * 7;
+  const DOW_CLASS    = ["sun","","","","","","sat"];
 
   for (let i = 0; i < totalCells; i++) {
-    let dateObj, isOther = false;
-
+    let d, isOther = false;
     if (i < firstDay) {
-      dateObj = new Date(currentYear, currentMonth - 1, daysInPrev - firstDay + 1 + i);
+      d = new Date(currentYear, currentMonth - 1, daysInPrev - firstDay + 1 + i);
       isOther = true;
     } else if (i >= firstDay + daysInMonth) {
-      dateObj = new Date(currentYear, currentMonth + 1, i - firstDay - daysInMonth + 1);
+      d = new Date(currentYear, currentMonth + 1, i - firstDay - daysInMonth + 1);
       isOther = true;
     } else {
-      dateObj = new Date(currentYear, currentMonth, i - firstDay + 1);
+      d = new Date(currentYear, currentMonth, i - firstDay + 1);
     }
 
-    const dateStr = dateObj.toISOString().slice(0, 10);
-    const isToday = dateStr === todayStr;
-    const dow = dateObj.getDay();
+    const ds      = localDateStr(d);
+    const isToday = ds === todayStr;
+    const dow     = d.getDay();
 
     const cell = document.createElement("div");
-    cell.className = `cell${isOther ? " other-month" : ""}${isToday ? " today" : ""} ${DAY_CLASSES[dow]}`;
+    cell.className = [
+      "cell",
+      isOther ? "other-month" : "",
+      isToday ? "today" : "",
+      DOW_CLASS[dow]
+    ].filter(Boolean).join(" ");
 
     // 날짜 숫자
-    const dateNum = document.createElement("div");
-    dateNum.className = "date-num";
-    dateNum.innerHTML = `${dateObj.getDate()}<span class="dot"></span>`;
-    cell.appendChild(dateNum);
+    const dn = document.createElement("div");
+    dn.className = "date-num";
+    dn.innerHTML = `${d.getDate()}<span class="today-dot"></span>`;
+    cell.appendChild(dn);
 
-    // 해당 날짜 이벤트 필터
-    const dayEvents = events.filter(e => dateStr >= e.start && dateStr <= e.end);
-    dayEvents.forEach(ev => {
-      const tag = document.createElement("div");
-      const typeClass = ev.type === "할일 목록" ? "type-할일" : `type-${ev.type}`;
-      tag.className = `event ${typeClass}${ev.done ? " done" : ""}`;
-      tag.textContent = ev.title;
+    // 이벤트 출력 (날짜가 start~end 범위 안에 들어오는 것)
+    events
+      .filter(ev => ds >= ev.start && ds <= ev.end)
+      .forEach(ev => {
+        const typeClass =
+          ev.type === "할일 목록" ? "type-할일" :
+          ev.type === "일기"      ? "type-일기"  : "type-일정";
 
-      // 멀티데이 표시
-      if (ev.start !== ev.end) {
-        if (dateStr === ev.start) tag.className += " multi-start";
-        else if (dateStr === ev.end) tag.className += " multi-end";
-        else tag.className += " multi-mid";
-      }
+        const el = document.createElement("div");
+        el.className = `event ${typeClass}${ev.done ? " done" : ""}`;
+        el.textContent = ev.title;
 
-      // 툴팁
-      tag.addEventListener("mouseenter", (e) => showTooltip(e, ev));
-      tag.addEventListener("mousemove", moveTooltip);
-      tag.addEventListener("mouseleave", hideTooltip);
-
-      cell.appendChild(tag);
-    });
+        el.addEventListener("mouseenter", e => showTT(e, ev));
+        el.addEventListener("mousemove",  moveTT);
+        el.addEventListener("mouseleave", hideTT);
+        cell.appendChild(el);
+      });
 
     grid.appendChild(cell);
   }
 }
 
-// --- 툴팁 ---
-function showTooltip(e, ev) {
+// 툴팁
+function showTT(e, ev) {
   document.getElementById("ttTitle").textContent = ev.title;
-  const dateStr = ev.start === ev.end
-    ? formatDateKR(ev.start)
-    : `${formatDateKR(ev.start)} → ${formatDateKR(ev.end)}`;
-  document.getElementById("ttDate").textContent = dateStr;
-  const tagEl = document.getElementById("ttTag");
-  tagEl.innerHTML = `<span class="tooltip-tag">${ev.type}${ev.importance ? " " + ev.importance : ""}</span>${ev.done ? '<span class="tooltip-tag" style="margin-left:4px">완료</span>' : ""}`;
+  document.getElementById("ttDate").textContent  =
+    ev.start === ev.end ? fmtKR(ev.start) : `${fmtKR(ev.start)} → ${fmtKR(ev.end)}`;
+  const tags = document.getElementById("ttTags");
+  tags.innerHTML = "";
+  [ev.type, ev.imp, ev.done ? "완료" : ""].filter(Boolean).forEach(t => {
+    const s = document.createElement("span");
+    s.className = "tt-tag";
+    s.textContent = t;
+    tags.appendChild(s);
+  });
   tooltip.classList.add("show");
-  moveTooltip(e);
+  moveTT(e);
 }
-
-function moveTooltip(e) {
+function moveTT(e) {
   tooltip.style.left = (e.clientX + 14) + "px";
-  tooltip.style.top = (e.clientY - 10) + "px";
+  tooltip.style.top  = (e.clientY - 8)  + "px";
 }
+function hideTT() { tooltip.classList.remove("show"); }
 
-function hideTooltip() {
-  tooltip.classList.remove("show");
-}
-
-function formatDateKR(str) {
+function fmtKR(str) {
   if (!str) return "";
   const [y, m, d] = str.split("-");
-  return `${y}년 ${parseInt(m)}월 ${parseInt(d)}일`;
+  return `${y}년 ${+m}월 ${+d}일`;
 }
 
-// --- 로딩 ---
-function setLoading(on) {
-  document.getElementById("loadingBar").classList.toggle("active", on);
+function setLoading(on) { document.getElementById("loadingBar").classList.toggle("active", on); }
+function setError(msg) {
+  const el = document.getElementById("errorMsg");
+  el.textContent = msg;
+  el.classList.toggle("show", !!msg);
 }
 
-// --- 시작 ---
 render();
 </script>
 </body>
