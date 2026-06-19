@@ -8,7 +8,10 @@ export default {
     if (request.method === 'OPTIONS') {
       return new Response(null, { headers: corsHeaders });
     }
-    const now = new Date();
+    const url = new URL(request.url);
+    const dateParam = url.searchParams.get('date');
+    const now = dateParam ? new Date(dateParam) : new Date();
+    
     const day = now.getDay();
     const diffToMonday = day === 0 ? -6 : 1 - day;
     const monday = new Date(now);
